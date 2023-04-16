@@ -1,0 +1,44 @@
+﻿@page "/menu"
+@using RPiDefender.Data
+@inject MenuScrapingService ScrapingService
+
+<PageTitle>Menu</PageTitle>
+
+<h1>Seznam restaurací</h1>
+@if (menuList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var menu in menuList)
+    {
+        <h3>@menu.RestaurantName</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Položka</th>
+                    <th>Cena</th>
+                </tr>
+                @foreach (var menuItem in @menu.Items)
+                {
+                    <tr>
+                        <td>@menuItem.Order</td>
+                        <td>@menuItem.Name</td>
+                        <td>@menuItem.Price</td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    }   
+}
+
+@code {
+    private IEnumerable<RestaurantMenu> menuList = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        menuList = await ScrapingService.GetMenu(new[] { "BOUNTY-ROCK-CAFE-id3259", "HOSTINEC-NA-STREDNI-4210" });
+    }
+}

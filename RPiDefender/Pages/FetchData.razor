@@ -1,0 +1,37 @@
+﻿@page "/fetchdata"
+@using RPiDefender.Data
+@inject CameraService CameraService
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (image == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+    </table>
+    <img src="data:image;base64,@System.Convert.ToBase64String(image)" />
+}
+
+@code {
+    private byte[] image;
+
+    protected override async Task OnInitializedAsync()
+    {
+        image = await CameraService.MakePicture();
+    }
+}

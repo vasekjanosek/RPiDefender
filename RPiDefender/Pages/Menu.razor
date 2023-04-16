@@ -39,6 +39,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        menuList = await ScrapingService.GetMenu();
+        menuList = await ScrapingService.GetMenu(new[] { "BOUNTY-ROCK-CAFE-id3259", "HOSTINEC-NA-STREDNI-4210" });
     }
 }

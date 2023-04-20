@@ -16,6 +16,7 @@ namespace RPiDefender
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<CameraService>();
             builder.Services.AddSingleton<MenuScrapingService>();
+            builder.Services.AddSingleton<PubService>();
 
             var app = builder.Build();
 

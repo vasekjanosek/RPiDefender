@@ -1,9 +1,73 @@
-﻿@page "/"
+﻿@using RPiDefender.Data
+@inject PubService PubService
+
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Vyber Restaurace k zobrazení</h1>
+<br />
+<label>ID Restaurace: </label>
+<input type="text" id="pubId" @bind-value="@pubId" />
+<button type="submit" onclick="@(async () => await CreateNewPub())">Použít</button>
 
-Welcome to your new app.
+<br />
+<br />
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<h3>Současné restaurace</h3>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Restaurace</th>
+        </tr>
+        @foreach (var pub in @pubs)
+        {
+            <tr>
+                <td><input type="checkbox" @bind-value="@pub.IsToDelete"/></td>
+                <td>@pub.Id</td>
+            </tr>
+        }
+    </thead>
+</table>
+
+<button onclick="@(() => DeleteSelectedRestaurant())">Smazat</button>
+
+
+@code{
+    private IEnumerable<Pub> pubs = null;
+
+    private string pubId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        PubService.PubsChanged += PubService_PubsChanged;
+        pubs = PubService.Pubs;
+    }
+
+    private void PubService_PubsChanged(object sender, EventArgs e)
+    {
+        pubs = PubService.Pubs;
+    }
+
+    private async Task CreateNewPub()
+    {
+        if (PubService.Pubs.Any(x => x.Id == pubId))
+        {
+            pubId = string.Empty;
+            return;   
+        }
+
+        await PubService.AddRestaurant(pubId);
+        pubId = string.Empty;
+    }
+
+    private void DeleteSelectedRestaurant()
+    {
+        foreach (var pub in pubs.Where(x => x.IsToDelete).ToList())
+        {
+            PubService.RemoveRestaurant(pub);
+        }
+    }
+}

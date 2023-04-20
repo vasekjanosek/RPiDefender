@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http.Features;
+using RPiDefender.Pages;
 using System.Text;
 
 namespace RPiDefender.Data
@@ -53,6 +54,18 @@ namespace RPiDefender.Data
             }
 
             return result;
+        }
+
+        public async Task<string?> GetRestaurantName(string id)
+        {
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument document = await web.LoadFromWebAsync("https://www.olomouc.cz/poledni-menu");
+            var restaurant = document.DocumentNode.SelectSingleNode($"//div[@class='restaurace {id}']");
+
+            if (restaurant == null)
+                return null;
+
+            return restaurant.SelectSingleNode("div[@class='nazev-restaurace']/div/h3/a").InnerText.Replace("&nbsp;", " ");
         }
     }
 }

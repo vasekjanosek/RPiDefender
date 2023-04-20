@@ -1,6 +1,7 @@
 ﻿@page "/menu"
 @using RPiDefender.Data
 @inject MenuScrapingService ScrapingService
+@inject PubService PubService
 
 <PageTitle>Menu</PageTitle>
 
@@ -39,6 +40,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        menuList = await ScrapingService.GetMenu(new[] { "BOUNTY-ROCK-CAFE-id3259", "HOSTINEC-NA-STREDNI-4210" });
+        PubService.PubsChanged += PubService_PubsChanged;
+        await RefreshMenu();
+    }
+
+    private async void PubService_PubsChanged(object sender, EventArgs e)
+    {
+        await RefreshMenu();
+    }
+
+    private async Task RefreshMenu()
+    {
+        menuList = await ScrapingService.GetMenu(PubService.Pubs.Select(x => x.Id).ToArray());
     }
 }

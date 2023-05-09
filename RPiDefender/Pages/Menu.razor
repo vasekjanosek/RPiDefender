@@ -6,13 +6,13 @@
 <PageTitle>Menu</PageTitle>
 
 <h1>Seznam restaurací</h1>
-@if (menuList == null)
+@if (@menuList == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    @foreach (var menu in menuList)
+    @foreach (var menu in @menuList)
     {
         <h3>@menu.RestaurantName</h3>
         <table class="table">
@@ -22,6 +22,8 @@ else
                     <th>Položka</th>
                     <th>Cena</th>
                 </tr>
+            </thead>
+            <tbody>
                 @foreach (var menuItem in @menu.Items)
                 {
                     <tr>
@@ -30,9 +32,9 @@ else
                         <td>@menuItem.Price</td>
                     </tr>
                 }
-            </thead>
+            </tbody>
         </table>
-    }   
+    }
 }
 
 @code {

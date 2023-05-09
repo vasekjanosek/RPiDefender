@@ -20,6 +20,11 @@ namespace RPiDefender.Data
                 condition.Append($"//div[@class='restaurace {menuId}']");
             }
 
+            if (condition.ToString().Length == 0)
+            {
+                return new List<RestaurantMenu>();
+            }
+
             HtmlWeb web = new HtmlWeb();
             HtmlDocument document = await web.LoadFromWebAsync("https://www.olomouc.cz/poledni-menu");
             var restaurants = document.DocumentNode.SelectNodes(condition.ToString());

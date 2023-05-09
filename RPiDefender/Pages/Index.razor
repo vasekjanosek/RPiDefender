@@ -16,23 +16,32 @@
 
 <h3>Současné restaurace</h3>
 <br />
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Restaurace</th>
-        </tr>
-        @foreach (var pub in @pubs)
-        {
+@if (pubs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td><input type="checkbox" @bind-value="@pub.IsToDelete"/></td>
-                <td>@pub.Id</td>
+                <th>ID</th>
+                <th>Restaurace</th>
             </tr>
-        }
-    </thead>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var pub in pubs)
+            {
+                <tr>
+                    <td><input type="checkbox" @bind-value="@pub.IsToDelete"/></td>
+                    <td>@pub.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<button onclick="@(() => DeleteSelectedRestaurant())">Smazat</button>
+    <button onclick="@(() => DeleteSelectedRestaurant())">Smazat</button>
+}
 
 
 @code{
